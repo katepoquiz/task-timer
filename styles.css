@@ -1,21 +1,21 @@
 /* Task Timer styles. Native Windows type, one accent per timer state. */
 
 :root {
-  --bg: #eef1f0;
+  --bg: #fbeef2;
   --surface: #ffffff;
-  --surface-2: #f5f7f6;
-  --line: #d9dfdc;
-  --ink: #1c2430;
-  --muted: #5d6873;
-  --primary: #1c2430;
+  --surface-2: #fdf3f6;
+  --line: #f0d3dc;
+  --ink: #3a2530;
+  --muted: #8a6673;
+  --primary: #b83d6b;
   --primary-ink: #ffffff;
-  --run: #0f7b5a;
-  --run-wash: #e3f3ec;
+  --run: #b83d6b;
+  --run-wash: #fde4ec;
   --pause: #a85c0a;
-  --pause-wash: #fbefdc;
-  --stop: #b4362a;
-  --stop-wash: #fbe9e6;
-  --focus: #2f6fd6;
+  --pause-wash: #fdf0e0;
+  --stop: #b3261e;
+  --stop-wash: #fbe7e6;
+  --focus: #b83d6b;
   --state: var(--line);
   --wash: var(--surface);
   color-scheme: light;
@@ -23,18 +23,18 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #12171d; --surface: #1a2028; --surface-2: #212833; --line: #2e3742;
-    --ink: #e7ecea; --muted: #97a3ad; --primary: #e7ecea; --primary-ink: #12171d;
-    --run: #3ccf98; --run-wash: #14281f; --pause: #f0ad4e; --pause-wash: #2c2216;
-    --stop: #ff7a6b; --stop-wash: #2e1a18; --focus: #7aa7ff;
+    --bg: #1d1418; --surface: #271b21; --surface-2: #30222a; --line: #44303a;
+    --ink: #f6e8ed; --muted: #c4a3b0; --primary: #f4a7c0; --primary-ink: #2a1520;
+    --run: #f48fb1; --run-wash: #3a1f2b; --pause: #f0ad4e; --pause-wash: #2e2318;
+    --stop: #ff8a80; --stop-wash: #36191a; --focus: #f4a7c0;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #12171d; --surface: #1a2028; --surface-2: #212833; --line: #2e3742;
-  --ink: #e7ecea; --muted: #97a3ad; --primary: #e7ecea; --primary-ink: #12171d;
-  --run: #3ccf98; --run-wash: #14281f; --pause: #f0ad4e; --pause-wash: #2c2216;
-  --stop: #ff7a6b; --stop-wash: #2e1a18; --focus: #7aa7ff;
+  --bg: #1d1418; --surface: #271b21; --surface-2: #30222a; --line: #44303a;
+    --ink: #f6e8ed; --muted: #c4a3b0; --primary: #f4a7c0; --primary-ink: #2a1520;
+    --run: #f48fb1; --run-wash: #3a1f2b; --pause: #f0ad4e; --pause-wash: #2e2318;
+    --stop: #ff8a80; --stop-wash: #36191a; --focus: #f4a7c0;
   color-scheme: dark;
 }
 
@@ -199,7 +199,7 @@ dialog {
   border: 1px solid var(--line); border-radius: 14px; padding: 1.25rem;
   width: min(460px, 92vw); background: var(--surface); color: var(--ink);
 }
-dialog::backdrop { background: rgba(10, 14, 20, 0.5); }
+dialog::backdrop { background: rgba(58, 37, 48, 0.45); }
 dialog h2 { font-size: 1.1rem; margin-bottom: 0.6rem; }
 .dialog-body p { margin: 0 0 0.6rem; }
 .dialog-body .summary { background: var(--surface-2); border-radius: 10px; padding: 0.7rem 0.85rem; margin-bottom: 0.6rem; }
@@ -219,7 +219,7 @@ dialog h2 { font-size: 1.1rem; margin-bottom: 0.6rem; }
 
 /* Toasts */
 .toasts { position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%); display: grid; gap: 0.5rem; z-index: 50; width: min(480px, 92vw); }
-.toast { background: var(--primary); color: var(--primary-ink); padding: 0.65rem 0.9rem; border-radius: 10px; font-size: 0.92rem; box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
+.toast { background: var(--primary); color: var(--primary-ink); padding: 0.65rem 0.9rem; border-radius: 10px; font-size: 0.92rem; box-shadow: 0 4px 16px rgba(58,37,48,0.2); }
 .toast.error { background: var(--stop); color: #fff; }
 
 @media (max-width: 640px) {

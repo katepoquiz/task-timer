@@ -235,6 +235,17 @@ function tick() {
   if (now - lastHeartbeat >= HEARTBEAT_MS) heartbeat(now);
 }
 
+// Update the screen right as each displayed second changes, so the clock never lags.
+let tickTimer = null;
+function scheduleTick() {
+  clearTimeout(tickTimer);
+  const a = state.active;
+  const delay = isRunning(a) ? 1000 - (elapsedMs(a) % 1000) + 10 : 1000;
+  tickTimer = setTimeout(() => {
+    try { tick(); } finally { scheduleTick(); }
+  }, delay);
+}
+
 // ---------- Rendering ----------
 
 function render() {
@@ -244,6 +255,7 @@ function render() {
   if (view === 'history') renderHistory();
   applyTheme();
   updateBadge();
+  if (tickTimer !== null) scheduleTick();
 }
 
 function renderTimer() {
@@ -757,7 +769,7 @@ function init() {
 
   heartbeat(now);
   lastTick = now;
-  setInterval(tick, 500);
+  scheduleTick();
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch((err) => console.warn('Offline support unavailable:', err));

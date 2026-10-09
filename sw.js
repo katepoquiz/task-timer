@@ -1,6 +1,6 @@
 // Offline support. Serves the app from a local cache, so it opens with no internet.
 // When you change any app file, bump VERSION so installed copies pick up the update.
-const VERSION = 'v1.0.0';
+const VERSION = 'v1.1.0';
 const CACHE = `tasktimer-${VERSION}`;
 const ASSETS = [
   './', './index.html', './styles.css', './app.js', './store.js', './time.js',
