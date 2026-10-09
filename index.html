@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Task Timer</title>
+  <meta name="description" content="A simple desktop timer for tracking time on tasks and projects.">
+  <meta name="theme-color" content="#1c2430">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    // Apply saved theme before first paint to avoid a flash.
+    try {
+      var t = JSON.parse(localStorage.getItem('tasktimer:data:v1') || '{}');
+      t = t && t.settings && t.settings.theme;
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+  <script type="module" src="app.js"></script>
+</head>
+<body data-status="idle">
+  <header class="topbar">
+    <div class="brand"><img src="icons/favicon-32.png" alt="" width="20" height="20"> Task Timer</div>
+    <nav class="tabs" aria-label="Views">
+      <button type="button" class="tab" data-view="timer" aria-current="page">Timer</button>
+      <button type="button" class="tab" data-view="history">History</button>
+    </nav>
+    <button type="button" class="icon-btn" id="settingsBtn" aria-label="Settings" title="Settings">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2-1.6-2-3.4-2.4 1a7.4 7.4 0 0 0-1.7-1L15 3.5h-4L10.7 6a7.4 7.4 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.6a7.6 7.6 0 0 0 0 2l-2 1.6 2 3.4 2.4-1c.5.4 1.1.7 1.7 1l.3 2.5h4l.3-2.5c.6-.3 1.2-.6 1.7-1l2.4 1 2-3.4-2-1.6ZM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z" transform="translate(-1 0)"/></svg>
+    </button>
+  </header>
+
+  <div class="fatal" id="fatal" hidden></div>
+
+  <main>
+    <!-- TIMER VIEW -->
+    <section id="view-timer" class="view">
+      <div class="panel timer-panel" id="timerPanel">
+        <div class="status-row">
+          <span class="status" id="statusChip"><span class="dot" aria-hidden="true"></span><span id="statusText">Not running</span></span>
+          <span class="today">Today <strong id="todayTotal">0m</strong></span>
+        </div>
+
+        <div class="current" id="currentTask" hidden>
+          <span class="current-task" id="curTask"></span>
+          <span class="current-project" id="curProject"></span>
+        </div>
+
+        <div class="clock" id="clock" role="timer" aria-label="Elapsed time">00:00:00</div>
+        <p class="meta" id="timerMeta">Enter a project and task, then press Start.</p>
+
+        <div class="reminder" id="reminderBanner" role="alert" hidden>
+          <p id="reminderText"></p>
+          <div class="reminder-actions">
+            <button type="button" class="btn small" data-reminder="ack">Still working</button>
+            <button type="button" class="btn small" data-reminder="pause">Pause</button>
+            <button type="button" class="btn small danger" data-reminder="stop">Stop</button>
+          </div>
+        </div>
+
+        <form id="taskForm" class="task-form" novalidate autocomplete="off">
+          <div class="fields">
+            <label class="field">
+              <span>Project</span>
+              <input id="projectInput" list="projectList" maxlength="100" placeholder="Project A" required>
+            </label>
+            <label class="field">
+              <span>Task</span>
+              <input id="taskInput" list="taskList" maxlength="100" placeholder="Prepare weekly report" required>
+            </label>
+          </div>
+          <p class="form-error" id="formError" role="alert" hidden></p>
+          <div class="controls">
+            <button type="submit" class="btn primary big" id="startBtn">Start</button>
+            <button type="button" class="btn big" id="pauseBtn" hidden>Pause</button>
+            <button type="button" class="btn danger big" id="stopBtn" hidden>Stop</button>
+          </div>
+          <button type="submit" class="btn switch" id="switchBtn" hidden>Stop current and start this task</button>
+        </form>
+      </div>
+
+      <section class="block">
+        <div class="block-head">
+          <h2>Recent sessions</h2>
+          <button type="button" class="link-btn" data-goto="history">See all history</button>
+        </div>
+        <ul class="sessions" id="recentList"></ul>
+      </section>
+    </section>
+
+    <!-- HISTORY VIEW -->
+    <section id="view-history" class="view wide" hidden>
+      <div class="block filters">
+        <div class="filter-grid">
+          <label class="field"><span>Project</span><select id="fProject"></select></label>
+          <label class="field"><span>Task</span><select id="fTask"></select></label>
+          <label class="field"><span>From</span><input type="date" id="fFrom"></label>
+          <label class="field"><span>To</span><input type="date" id="fTo"></label>
+        </div>
+        <div class="quick">
+          <button type="button" class="chip" data-range="today">Today</button>
+          <button type="button" class="chip" data-range="week">This week</button>
+          <button type="button" class="chip" data-range="month">This month</button>
+          <button type="button" class="chip" data-range="all">All time</button>
+          <span class="spacer"></span>
+          <button type="button" class="btn small" id="exportCsv">Export CSV</button>
+        </div>
+      </div>
+
+      <section class="block">
+        <div class="block-head"><h2>Totals</h2><span class="grand" id="histTotal"></span></div>
+        <div id="totals"></div>
+      </section>
+
+      <section class="block">
+        <div class="block-head"><h2>Sessions by day</h2></div>
+        <div id="histList"></div>
+      </section>
+    </section>
+  </main>
+
+  <datalist id="projectList"></datalist>
+  <datalist id="taskList"></datalist>
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+</body>
+</html>
